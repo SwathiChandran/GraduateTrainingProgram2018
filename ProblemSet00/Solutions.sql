@@ -1,0 +1,125 @@
+-- ProblemSet00<No.>, November <25> <2018>-- 
+ Submission by <s.aa.ravichandran>  
+ 1)Select the Employee with the top three salaries 
+ SELECT NAME FROM EMPLOYEE WHERE SALARY >=(SELECT MAX(SALARY) FROM EMPLOYEE WHERE SALARY <(SELECT MAX(SALARY) FROM EMPLOYEE WHERE SALARY <(SELECT MAX(SALARY) FROM EMPLOYEE)))ORDER BY SALARY; 
+ ADAM WAYNE 
+ PAUL VINCENT 
+TARA CUMMINGS 
+Record count=3 
+
+ 2)Select the Employee with the least salary 
+ SELECT NAME FROM EMPLOYEE WHERE SALARY=(SELECT MIN(SALARY) FROM EMPLOYEE);
+JOHN HELLEN; 
+Record count=1
+ 
+ 3)Select the Employee who does not have a manager in the department table
+  SELECT * FROM EMPLOYEE E INNER JOIN DEPT D ON E.NAME=D.DEP_MANAGER;
+A178|BRUCE WILLS|D03|66861|A298|D03|PRODUCT|BRUCE WILLS
+A120|TIM ARCHER|D01|48834|A298|D01|HEALTH|TIM ARCHER
+A187|ADAM JUSTIN|D02|80543|A298|D02|COMMUNICATIONS|ADAM JUSTIN
+A187|ROBERT SWIFT|D04|27700|A298|D04|INSURANCE|ROBERT SWIFT
+Record count=4
+
+4)Select the Employee who is also a Manager 
+ SELECT DISTINCT NAME  FROM EMPLOYEE E INNER JOIN EMPLOYEE D ON E.E_ID=D.MANGER_ID; 
+ BRUCE WILLS
+TIM ARCHER
+ADAM JUSTIN
+ROBERT SWIFT
+NATASHA STEVENS
+Record count=5
+
+5)Select the Empolyee who is a Manager and has least salary
+ SELECT MIN(SALARY) FROM(SELECT DISTINCT E.NAME,E.SALARY  FROM EMPLOYEE E INNER JOIN EMPLOYEE D ON E.E_ID=D.MANGER_ID);
+27700
+Record count=1
+
+6)Select the total number of Employees in Communications departments
+SELECT COUNT(NAME) FROM EMPLOYEE WHERE DEP_ID='D02';
+6
+Record count=1
+
+7)Select the Employee in Finance Department who has the top salary
+SELECT MAX(SALARY),NAME FROM EMPLOYEE WHERE DEP_ID=(SELECT DEP_ID FROM DEPT WHERE DEP_NAME='FINANCE');
+94324	ADAM WAYNE
+Record count=1
+
+8)Select the Employee in product depatment who has the least salary
+SELECT NAME,MIN(SALARY) FROM EMPLOYEE WHERE DEP_ID=(SELECT DEP_ID FROM DEPT WHERE DEP_NAME='PRODUCT');
+NICK MARTIN	50174
+Record count=1
+
+9)Select the count of Empolyees in Health with maximum salary
+SELECT NAME,MIN(SALARY) FROM EMPLOYEE WHERE DEP_ID=(SELECT DEP_ID FROM DEPT WHERE DEP_NAME='PRODUCT');
+1
+Record count=1
+
+10)Select the Employees who report to Natasha Stevens
+SELECT NAME FROM EMPLOYEE WHERE MANGER_ID=(SELECT E_ID FROM EMPLOYEE WHERE NAME='NATASHA STEVENS');
+ADAM WAYNE
+JOSEPH ANGELIN
+Record count=2
+
+11)Display the Employee name,Employee count,Dep name,Dept manager in the Health department
+SELECT NAME,COUNT(NAME) FROM EMPLOYEE WHERE (SELECT DEP_NAME,DEP_MANAGER FROM DEPT  WHERE DEP_NAME='HEALTH');
+
+12)Display the Department id,Employee ids and Manager ids for the Communications department
+SELECT DEP_ID,E_ID,MANGER_ID FROM EMPLOYEE WHERE DEP_ID=(SELECT DEP_ID FROM DEPT WHERE DEP_NAME='COMMUNICATIONS');
+D02	A116	A187
+D02	A198	A187
+D02	A187	A298
+D02	A121	A187
+D02	A194	A187
+D02	A133	A187
+Record count=6
+
+13)Select the Average Expenses for Each dept with Dept id and Dept name
+SELECT AVG(SALARY),D.DEP_NAME,E.DEP_ID FROM  DEPT D INNER JOIN EMPLOYEE E ON D.DEP_ID=E.DEP_ID GROUP BY D.DEP_ID;
+
+54527.666666666664	HEALTH	D01
+48271.333333333336	COMMUNICATIONS	D02
+58517.5	PRODUCT	D03
+51913.333333333336	INSURANCE	D04
+56660.333333333336	FINANCE	D05
+Record count=5
+
+14)Select the total expense for the department finance
+SELECT SUM(SALARY) FROM EMPLOYEE WHERE DEP_ID=(SELECT DEP_ID FROM DEPT WHERE DEP_NAME='FINANCE');
+169981
+Record count=1
+
+15)Select the department which spends the least with Dept id and Dept manager name
+SELECT MIN(SALARY),DEP_ID,DEP_NAME FROM(SELECT SUM(SALARY),D.DEP_ID,D.DEP_NAME FROM EMPLOYEE E INNER JOIN DEPT D GROUP BY DEP_ID; 
+1059550|D01|HEALTH
+Record count=1
+
+16)Select the count of Employees in each department
+SELECT COUNT(*) FROM EMPLOYEE GROUP BY DEP_ID;
+6
+6
+2
+3
+3
+Record count=5
+
+17)Select the count of Employees in each department having salary <10000
+SELECT COUNT(*) FROM EMPLOYEE WHERE SALARY<10000 GROUP BY DEP_ID;
+Record count=0
+
+18)Select the total number of Employees in Dept id D04
+SELECT COUNT(*) FROM EMPLOYEE WHERE DEP_ID='D04';
+3
+Record count=1
+
+19)Select all department details of the Department with Maximum Employees
+SELECT MAX(COUNT),DEP_ID,DEP_NAME,DEP_MANAGER FROM(SELECT COUNT(*) AS COUNT,D.DEP_ID,D.DEP_NAME,D.DEP_MANAGER  FROM EMPLOYEE E INNER JOIN DEPT D GROUP BY D.DEP_ID);
+20|D01|HEALTH|TIM ARCHER
+Record count=1
+
+20)Select the Employees who has Tim Cook as their manager
+SELECT NAME FROM EMPLOYEE WHERE MANGER_ID=(SELECT E_ID FROM EMPLOYEE WHERE NAME='TIM COOK');
+Record count=0
+
+
+
+
